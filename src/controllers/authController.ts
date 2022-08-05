@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { Request, Response } from "express";
 import prisma from "../prisma";
 import UserService from "../services/userService";
+import { serialize } from 'cookie';
 
 class AuthController {
   async signUp(req: Request, res: Response) {
@@ -91,6 +92,12 @@ class AuthController {
         msg: "Error At Sign-up",
       });
     }
+  }
+
+  async getProfile(req: Request, res: Response) {
+    return res.send({
+      user: req.user,
+    })
   }
 }
 

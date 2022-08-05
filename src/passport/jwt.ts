@@ -14,6 +14,8 @@ passport.use(
           token = req.signedCookies["access_token"];
         }
 
+        console.log(req.cookies, req.signedCookies)
+
         return token;
       },
     },

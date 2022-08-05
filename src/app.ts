@@ -1,6 +1,11 @@
 import express, { Express } from "express";
 import morgan from "morgan";
+import passport from "passport";
 import router from "./routers";
+import session from 'cookie-session';
+import cors from 'cors';
+
+require('./passport/jwt')
 
 const app: Express = express();
 
@@ -11,6 +16,16 @@ app.use(morgan("dev"));
 app.set("port", process.env.PORT || 8080);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  credentials: true,
+  origin: "localhost"
+}))
+app.use(passport.initialize())
+app.use(session({
+  maxAge: 24 * 60 * 60 * 1000,
+  keys: ["secret_cookie"]
+}))
+app.use(passport.session())
 
 // routers
 app.get("/", (req, res) => {
