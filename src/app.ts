@@ -1,5 +1,6 @@
 import express, { Express } from 'express';
 import morgan from 'morgan';
+import router from './routers';
 
 const app: Express = express();
 
@@ -13,5 +14,7 @@ app.set('port', process.env.PORT || 8080);
 app.get('/', (req, res) => {
     return res.send("Hello World");
 })
+
+app.use("/api", router)
 
 export default app;
