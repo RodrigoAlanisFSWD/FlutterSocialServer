@@ -4,6 +4,7 @@ import passport from "passport";
 import router from "./routers";
 import session from 'cookie-session';
 import cors from 'cors';
+import path from 'path';
 
 require('./passport/jwt')
 
@@ -33,5 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", router);
+
+app.use("/avatar", express.static(path.join(__dirname, "../uploads/")))
 
 export default app;

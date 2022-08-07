@@ -31,17 +31,10 @@ class AuthController {
       const { token, refresh } = UserService.generateTokensFromUser(user);
 
       return res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          secure: true,
-        })
-        .cookie("refresh_token", refresh, {
-          httpOnly: true,
-          secure: true,
-        })
         .status(200)
         .json({
           token,
+          refresh,
           user,
         });
     } catch (error) {
@@ -74,17 +67,10 @@ class AuthController {
       const { token, refresh } = UserService.generateTokensFromUser(user);
 
       return res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          secure: true,
-        })
-        .cookie("refresh_token", refresh, {
-          httpOnly: true,
-          secure: true,
-        })
         .status(200)
         .json({
           token,
+          refresh,
           user,
         });
     } catch (error) {
@@ -94,11 +80,6 @@ class AuthController {
     }
   }
 
-  async getProfile(req: Request, res: Response) {
-    return res.send({
-      user: req.user,
-    })
-  }
 }
 
 export default new AuthController();

@@ -1,23 +1,13 @@
 import { Request } from "express";
 import passport from "passport";
-import { Strategy as JWTStrategy } from "passport-jwt";
+import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import prisma from "../prisma";
 
 passport.use(
   new JWTStrategy(
     {
       secretOrKey: "secret_key",
-      jwtFromRequest: (req: any) => {
-        let token = null;
-
-        if (req && req.signedCookies && req.signedCookies["acccess_token"]) {
-          token = req.signedCookies["access_token"];
-        }
-
-        console.log(req.cookies, req.signedCookies)
-
-        return token;
-      },
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     },
     async (payload, done) => {
       try {
@@ -33,6 +23,7 @@ passport.use(
 
         return done(null, user);
       } catch (error) { 
+        console.log(error);
         return done(error);
       }
     }
