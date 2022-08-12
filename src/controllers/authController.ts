@@ -80,6 +80,41 @@ class AuthController {
     }
   }
 
+  async refreshToken(req: Request, res: Response) {
+    try {
+      const { refreshToken } = req.body;
+
+    const decode: any = await UserService.verifyRefresh(refreshToken);
+
+    if (!decode) {
+      return res.status(401);
+    }
+
+    const user = await prisma.user.findFirst({
+      where: {
+        id: decode.id as number,
+      }
+    })
+
+    if (!user) {
+      return res.status(401);
+    }
+
+    const { token, refresh } = UserService.generateTokensFromUser(user);
+
+    return res
+        .status(200)
+        .json({
+          token,
+          refresh,
+          user,
+        });
+  
+    } catch (error) {
+      return res.status(500)
+    }
+  }
+
 }
 
 export default new AuthController();

@@ -39,7 +39,7 @@ class UserService {
 
     generateTokensFromUser(user: User) {
         const token = jwt.sign({ id: user.id }, "secret_key", {
-            expiresIn: 60 * 30,
+            expiresIn: 60 * 60 * 1,
         })
 
         const refresh = jwt.sign({ id: user.id }, "refresh_secret_key", {
@@ -50,6 +50,16 @@ class UserService {
             token,
             refresh
         }
+    }
+
+    async verifyRefresh(refresh: string) {
+        const verify = jwt.verify(refresh, "refresh_secret_key");
+
+        if (verify) {
+            return jwt.decode(refresh);
+        }
+
+        return null;
     }
 
 }
